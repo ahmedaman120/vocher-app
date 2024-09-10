@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+
+  voucher-pool:
+    build: .
+    network_mode: host
+    restart: always
+    env_file : 
+      - ./env/dev.env
+  postgres:
+    image: postgres:14-alpine
+    ports:
+      - 5434:5432
+    volumes:
+      - ./apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_USER=user
+      - POSTGRES_DB=voucherdb
+    networks:
+        - rabbitmq_go_net
+    restart: always
+
+networks:
+  rabbitmq_go_net:
+    driver: bridge
