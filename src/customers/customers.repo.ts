@@ -43,7 +43,7 @@ export class CustomersRepo {
       throw error
     }
   }
-  async findAll(): Promise<CustomerEntity[] | null> {
+  async getAll(): Promise<CustomerEntity[] | null> {
     try {
       return await this.customerModel.findAll({
         include: VoucherEntity

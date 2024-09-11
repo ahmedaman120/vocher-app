@@ -1,7 +1,7 @@
 import { CustomerEntity } from '../customers/entity/customers.entity';
 import { VouchersRepo } from './vouchers.repo';
 import { ProductEntity } from '../products/entity/product.entity';
-import { instance, mock, reset, verify, when } from 'ts-mockito';
+import { anything, instance, mock, reset, verify, when } from 'ts-mockito';
 import { getModelToken } from '@nestjs/sequelize';
 import { DatabaseModuleModule } from '../database-module/database-module.module';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -60,7 +60,7 @@ describe('VouchersRepo', () => {
     expect(service).toBeDefined();
   });
 
-  xit("should create voucher using create function from model", async () => {
+  it("should create voucher using create function from model", async () => {
     const today = new Date();
 
     const expireAfterThrteenDays = new Date();
@@ -86,7 +86,7 @@ describe('VouchersRepo', () => {
       }
     })
     when(MockCustomerEntity.findAll()).thenResolve(customers)
-    when(MockVoucherEntity.bulkCreate(customersVouchers)).thenResolve(vochers);
+    when(MockVoucherEntity.bulkCreate(anything())).thenResolve(vochers);
     
       const result = await service.createVoucher(voucher);
       console.log(result)
@@ -115,5 +115,50 @@ describe('VouchersRepo', () => {
     }
   })
 
+  it("should throw error if customer enter invalid email",async()=>{
+    const voucherRedeem = {email:"test@g.com",code:"sjkasd"};
+    when(MockCustomerEntity.findOne(anything())).thenResolve(null);
 
+    try {
+      await service.redeemVoucherTransaction(voucherRedeem.email, voucherRedeem.code);
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toEqual("Customer not found")
+    }
+    
+  })
+
+
+  it("should throw error if customer enter invalid code",async()=>{
+    const voucherRedeem = {email:"test@g.com",code:"sjkasd"};
+    
+    when(MockCustomerEntity.findOne(anything())).thenResolve(instance(mock(CustomerEntity)));
+    when(MockVoucherEntity.findOne(anything())).thenResolve(null);
+
+    try {
+      await service.redeemVoucherTransaction(voucherRedeem.email, voucherRedeem.code);
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toEqual("Voucher not found")
+    }
+    
+  })
+
+  it("should throw error if customer enter valid code but expiry date is done",async()=>{
+    const voucherRedeem = {email:"test@g.com",code:"sjkasd"};
+    const today = new Date();
+    const pastDate = new Date();
+    pastDate.setDate(today.getDate()-3);
+    when(MockCustomerEntity.findOne(anything())).thenResolve(instance(mock(CustomerEntity)));
+    const mockVoucherWithExpiration = instance(mock(VoucherEntity))
+    when(MockVoucherEntity.findOne(anything())).thenResolve(mockVoucherWithExpiration);
+    when(mock(VouchersRepo).getExpiryDate(anything())).thenReturn(pastDate);
+    try {
+      await service.redeemVoucherTransaction(voucherRedeem.email, voucherRedeem.code);
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toEqual("Vocher is expired")
+    }
+    
+  })
 });

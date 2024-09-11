@@ -52,7 +52,7 @@ describe('CustomersService', () => {
 
   it('should return all customers entities ', async () => {
     
-    when(MockCustomerRepo.findAll()).thenResolve([instance(mock(CustomerEntity)),instance(mock(CustomerEntity))]);
+    when(MockCustomerRepo.getAll()).thenResolve([instance(mock(CustomerEntity)),instance(mock(CustomerEntity))]);
    
    const result =await service.getAll()
    expect(result.length).toEqual(2)

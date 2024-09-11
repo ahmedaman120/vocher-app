@@ -42,6 +42,9 @@ export class ProductEntity extends Model<ProductEntity>{
     @Column({ type: DataType.DATE })
     declare lastVoucherUse: Date;
 
+    @Column({ type: DataType.NUMBER })
+    declare numOfRedeem: number;
+
     @Column({
         type: DataType.DATE
     })

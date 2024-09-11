@@ -5,10 +5,14 @@ import { DatabaseModuleModule } from './database-module/database-module.module';
 import { CustomersModule } from './customers/customers.module';
 import { VouchersModule } from './vouchers/vouchers.module';
 import { ProductsModule } from './products/products.module';
-
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 10,
+    }]),
     DatabaseModuleModule, 
     CustomersModule, 
     VouchersModule, 

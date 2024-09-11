@@ -60,8 +60,9 @@ describe("UserRepo with db",()=>{
   it("should call findAll to get all customers entity",async()=>{
     
    
-    const result = await service2.findAll();
+    const result = await service2.getAll();
   
     expect(result.length).toEqual(2)
+    expect(result[0].vouchers).toBeDefined()
   })
 })

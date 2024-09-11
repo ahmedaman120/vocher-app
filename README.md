@@ -41,7 +41,26 @@ date of usage
 
 ### Instalation
 1. update env/dev.env based on your docker-compose env variables
+```bash
+DB_HOST=localhost
+DB_PORT=5434
+DB_USERNAME=user
+DB_PASSWORD=secret
+DB_DATABASE=voucherdb
+NODE_ENV=test # if you want to run in memory sqlite database. remove it if you want use persistent database.
+```
 2. run docker compose up --build -d to build and run docker files
 
+### Testing
+1. run npm install
+2. run npm run test
+
+### Postman Collection 
+you will find postman collection with examples on root project directory with name "Vochers-app.postman_collection.json" load it on postman app and test project after run 
+```bash
+npm run start
+```
+
 ### Database schema
+There's update in current schema on offer table numOfRedeem that indicate the number of customers that have used the voucher. 
 ![SB schema](tes.png)

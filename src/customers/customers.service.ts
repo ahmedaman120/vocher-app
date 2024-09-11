@@ -21,7 +21,7 @@ export class CustomersService {
 
     async getAll():Promise<CustomerEntity[]| null>{
         try {
-            return await this.customerRepo.findAll()
+            return await this.customerRepo.getAll()
         } catch (error) {
             throw error;
         }

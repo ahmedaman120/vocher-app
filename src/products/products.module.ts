@@ -7,6 +7,7 @@ import { VouchersModule } from 'src/vouchers/vouchers.module';
 import { ProductsRepo } from './products.repo';
 import { getModelToken } from '@nestjs/sequelize';
 import { ProductEntity } from './entity/product.entity';
+import { VoucherEntity } from 'src/vouchers/entity/voucher.entity';
 
 @Module({
   imports:[
@@ -20,6 +21,10 @@ import { ProductEntity } from './entity/product.entity';
   {
     provide: getModelToken(ProductEntity),
     useValue: ProductEntity
+  },
+  {
+    provide: getModelToken(VoucherEntity),
+    useValue: VoucherEntity
   }],
   exports: [ProductsService],
 })

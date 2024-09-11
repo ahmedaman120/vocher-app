@@ -14,7 +14,7 @@ describe('ProductsRepo', () => {
   const MockProductEntity: typeof ProductEntity = mock(ProductEntity) as unknown as typeof ProductEntity;
   let service: ProductsRepo;
   let productEntityMock: ProductEntity;
-  const MockVoucherEntity = mock(VoucherEntity);
+  const MockVoucherEntity = mock(VoucherEntity) as unknown as typeof VoucherEntity;
   let sequelize: Sequelize;
   beforeAll(async()=>{
     
@@ -73,4 +73,6 @@ describe('ProductsRepo', () => {
     verify(MockProductEntity.findAll()).called()
     expect(result.length).toEqual(1);
   })
+
+  
 });
