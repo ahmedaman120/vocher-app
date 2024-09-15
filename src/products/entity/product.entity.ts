@@ -26,7 +26,7 @@ export class ProductEntity extends Model<ProductEntity>{
     declare name: string
 
     @Column({
-        type: DataType.DOUBLE(4, 2)
+        type: DataType.DOUBLE
     })
     declare percentage: number;
 
@@ -42,7 +42,7 @@ export class ProductEntity extends Model<ProductEntity>{
     @Column({ type: DataType.DATE })
     declare lastVoucherUse: Date;
 
-    @Column({ type: DataType.NUMBER })
+    @Column({ type: DataType.INTEGER })
     declare numOfRedeem: number;
 
     @Column({

@@ -10,11 +10,11 @@ export const databaseProviders = [
         useFactory: async () => {
             const sequelize = new Sequelize({
                 dialect: isTest? "sqlite" : 'postgres',
-                host: isTest ? undefined : 'localhost',
-                port: isTest ? undefined :  3306,
-                username: isTest ? undefined : 'root',
-                password: isTest ? undefined : 'password',
-                database: process.env.DB,
+                host: isTest ? undefined : <string>process.env.DB_HOST,
+                port: isTest ? undefined : <number><unknown> process.env.DB_PORT,
+                username: isTest ? undefined : <string>process.env.DB_USERNAME,
+                password: isTest ? undefined : <string>process.env.DB_PASSWORD,
+                database: <string>process.env.DB_DATABASE,
             });
             sequelize.addModels([CustomerEntity, ProductEntity, VoucherEntity]);
             await sequelize.sync();
