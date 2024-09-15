@@ -39,8 +39,8 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
-    volumes:
-      - ./grafana:/etc/grafana/provisioning/datasources
+    # volumes:
+    #   - "./prometheus-grafana.yml:/etc/grafana/provisioning/datasources
     networks:
       - rabbitmq_go_net
 

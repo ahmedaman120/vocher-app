@@ -7,6 +7,7 @@ import { CustomerEntity } from '../customers/entity/customers.entity';
 import { ProductEntity } from '../products/entity/product.entity';
 import { VoucherEntity } from './entity/voucher.entity';
 import { DatabaseModuleModule } from '../database-module/database-module.module';
+import { makeCounterProvider, makeHistogramProvider, PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 describe('VouchersController', () => {
   let controller: VouchersController;
@@ -14,7 +15,11 @@ describe('VouchersController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [VouchersController],
-      imports:[DatabaseModuleModule],
+      imports:[DatabaseModuleModule,
+        PrometheusModule.register({
+          path: '/voucher/metrics',
+        }),
+      ],
       providers:[
         VouchersService,
         VouchersRepo,
@@ -29,7 +34,17 @@ describe('VouchersController', () => {
         {
           provide: getModelToken(ProductEntity),
           useValue: ProductEntity,
-        }
+        },
+        makeCounterProvider({
+          name: 'voucher_requests_total',
+          help: 'Tracks the number of voucher-related operations',
+          labelNames: ['status'],
+        }),
+        makeHistogramProvider({
+          name: 'voucher_request_duration_seconds',
+          help: 'Duration of voucher requests',
+          labelNames: ['status'],
+        }),
       ]
     }).compile();
 
